@@ -22,7 +22,7 @@ from typing import Literal
 ModelType = Literal["chart", "dataset", "dashboard", "database"]
 
 # Pagination defaults
-DEFAULT_PAGE_SIZE = 10  # Default number of items per page
+DEFAULT_PAGE_SIZE = 20  # Default number of items per page
 MAX_PAGE_SIZE = 100  # Maximum allowed page_size to prevent oversized responses
 
 # Response size guard defaults
