@@ -63,13 +63,13 @@ export default function TimeOffsetControls({
   ...props
 }: TimeOffsetControlsProps) {
   const [startDate, setStartDate] = useState<string>('');
-  const [formatedDate, setFormatedDate] = useState<Dayjs | undefined>(
+  const [formattedDate, setFormattedDate] = useState<Dayjs | undefined>(
     undefined,
   );
   const [customStartDateInFilter, setCustomStartDateInFilter] = useState<
     Dayjs | undefined
   >(undefined);
-  const [formatedFilterDate, setFormatedFilterDate] = useState<
+  const [formattedFilterDate, setFormattedFilterDate] = useState<
     Dayjs | undefined
   >(undefined);
   const [savedStartDate, setSavedStartDate] = useState<string | null>(null);
@@ -150,11 +150,11 @@ export default function TimeOffsetControls({
         const dates = res?.value?.match(DEFAULT_DATE_PATTERN);
         const [startDate, endDate] = dates ?? [];
         customTimeRange(`${startDate} : ${endDate}`);
-        setFormatedFilterDate(extendedDayjs(parseDttmToDate(startDate)));
+        setFormattedFilterDate(extendedDayjs(parseDttmToDate(startDate)));
       });
     } else {
       setCustomStartDateInFilter(undefined);
-      setFormatedFilterDate(extendedDayjs(parseDttmToDate('')));
+      setFormattedFilterDate(extendedDayjs(parseDttmToDate('')));
     }
   }, [currentTimeRangeFilters, customTimeRange]);
 
@@ -170,15 +170,15 @@ export default function TimeOffsetControls({
       }
       if (customStartDateInFilter) {
         setStartDate(customStartDateInFilter.toString());
-        setFormatedDate(extendedDayjs(customStartDateInFilter));
+        setFormattedDate(extendedDayjs(customStartDateInFilter));
       } else if (date) {
         setStartDate(date);
-        setFormatedDate(extendedDayjs(parseDttmToDate(date)));
+        setFormattedDate(extendedDayjs(parseDttmToDate(date)));
       }
     } else if (savedStartDate) {
       if (savedStartDate !== INVALID_DATE) {
         setStartDate(savedStartDate);
-        setFormatedDate(extendedDayjs(parseDttmToDate(savedStartDate)));
+        setFormattedDate(extendedDayjs(parseDttmToDate(savedStartDate)));
       }
     }
   }, [previousCustomFilter, savedStartDate, customStartDateInFilter]);
@@ -186,26 +186,26 @@ export default function TimeOffsetControls({
   useEffect(() => {
     // When switching offsets from inherit and the previous custom is no longer valid
     if (customStartDateInFilter) {
-      if (formatedDate && formatedDate > customStartDateInFilter) {
+      if (formattedDate && formattedDate > customStartDateInFilter) {
         const resetDate = extendedDayjs
           .utc(customStartDateInFilter)
           .subtract(1, 'day');
         setStartDate(resetDate.toString());
-        setFormatedDate(resetDate);
+        setFormattedDate(resetDate);
         onChange(extendedDayjs.utc(resetDate).format(DAYJS_FORMAT));
         setIsDateSelected(true);
       }
     }
     if (
-      formatedDate &&
-      formatedFilterDate &&
-      formatedDate > formatedFilterDate
+      formattedDate &&
+      formattedFilterDate &&
+      formattedDate > formattedFilterDate
     ) {
       const resetDate = extendedDayjs
         .utc(formatedFilterDate)
         .subtract(1, 'day');
       setStartDate(resetDate.toString());
-      setFormatedDate(resetDate);
+      setFormattedDate(resetDate);
       onChange(extendedDayjs(resetDate).utc().format(DAYJS_FORMAT));
       setIsDateSelected(true);
     }
@@ -228,11 +228,11 @@ export default function TimeOffsetControls({
           onChange(datetime ? datetime.format(DAYJS_FORMAT) : '')
         }
         defaultPickerValue={
-          startDate ? extendedDayjs(formatedDate).subtract(1, 'day') : undefined
+          startDate ? extendedDayjs(formattedDate).subtract(1, 'day') : undefined
         }
         disabledDate={disabledDate}
-        defaultValue={extendedDayjs(formatedDate)}
-        value={isDateSelected ? extendedDayjs(formatedDate) : null}
+        defaultValue={extendedDayjs(formattedDate)}
+        value={isDateSelected ? extendedDayjs(formattedDate) : null}
       />
     </div>
   ) : null;
